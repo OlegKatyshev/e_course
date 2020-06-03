@@ -1,5 +1,2 @@
-import "./style.scss";
-import Mod from "./Mod.js";
-
-const m = new Mod('hellow wrld');
-m.get();
+import '@fortawesome/fontawesome-free/js/all.js';
+import "./scss/style.scss";

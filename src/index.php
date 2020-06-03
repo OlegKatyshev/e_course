@@ -9,6 +9,6 @@
     <link rel="shourtcut icon" href="./dist/favicon.png">
 </head>
 <body>
-    <div class="app"></div>
+    <div id="app"></div>
 </body>
 </html>
