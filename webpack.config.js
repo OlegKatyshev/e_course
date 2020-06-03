@@ -70,7 +70,19 @@ module.exports = {
                         presets: ["@babel/preset-env"]
                     }
                 }
-            }
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg|eot|woff|ttf|woff2)$/i,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            publicPath: 'dist',
+                            name: '[name].[ext]',
+                        },
+                    },
+                ],
+            },
         ],
     },
 }
