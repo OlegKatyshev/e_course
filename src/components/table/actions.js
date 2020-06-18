@@ -1,4 +1,6 @@
 import $ from '@core/Dom.js';
+import {range} from "@core/utils.js";
+
 
 export function resize(resizerElement) {
 
@@ -44,4 +46,36 @@ export function resize(resizerElement) {
             resizer.css({opacity: 0, bottom: 0, right: 0});
         }
     };
+}
+
+export function isCell(el) {
+    return el.dataset.type == 'cell';
+}
+
+export function matrix(cur, prev) {
+
+    cur = cur.id(true);
+    prev = prev.id(true);
+
+    let cols = range(cur.col, prev.col);
+    let rows = range(cur.row, prev.row);
+
+    return cols.reduce( (acc, col) => {
+        rows.forEach( row => acc.push(`${row}:${col}`))
+        return acc;
+    }, []);
+}
+
+export function nextSelector(key, {col, row}) {
+
+    switch (key){
+        case 'Enter':
+        case 'ArrowDown': row++; break;
+        case 'Tab':
+        case 'ArrowRight': col++; break;
+        case 'ArrowUp': row = ((row-1) < 0) ? 0 : row-1; break;
+        case 'ArrowLeft': col = ((col-1) < 0) ? 0 : col-1; break;
+    }
+
+    return `[data-id="${row}:${col}"]`;
 }

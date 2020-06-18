@@ -23,8 +23,9 @@ function createColumn(el,index) {
             </div>`;
 }
 
-function createCell(_, index) {
-    return `<div class="cell" contenteditable="true" data-col=${index}></div>`;
+
+function toCell(row) {
+    return (_, col) => `<div class="cell" contenteditable="true" data-type="cell" data-col=${col} data-id =${row}:${col}></div>`;
 }
 
 function toChar(_,i) {
@@ -45,7 +46,7 @@ export function createTable(rowCnt = 15) {
     for (let i = 0; i < rowCnt; i++){
 
         const cells = new Array(columCnt).fill('')
-            .map(createCell)
+            .map(toCell(i))
             .join('');
 
         rows.push(createRow(i+1, cells));
