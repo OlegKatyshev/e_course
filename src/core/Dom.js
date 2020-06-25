@@ -14,11 +14,11 @@ class Dom {
     }
 
     text(text){
-        if(typeof text === 'string') {
-            this.el.textContent = text.trim()
+        if(typeof text !== 'undefined') {
+            this.el.textContent = text;
             return this;
         }
-        if(this.el.tagName.toUpperCase() === 'input'){
+        if(this.el.tagName.toUpperCase() === 'INPUT'){
             return this.el.value.trim();
         }
 
@@ -53,6 +53,18 @@ class Dom {
 
     get data(){
         return this.el.dataset;
+    }
+
+    get parent(){
+        return $(this.el.parentNode);
+    }
+
+    getStyles(styles=[]){
+
+        return styles.reduce( (res, s) => {
+            res[s] = this.el.style[s];
+            return res;
+        }, {});
     }
 
     closest(s){
@@ -106,6 +118,14 @@ class Dom {
         return this;
     }
 
+    attr(attr, val){
+        if(val) {
+            this.el.setAttribute(attr, val);
+            return this;
+        }
+        return this.el.getAttribute(attr);
+    }
+
     css(options = {}){
         for (let prop in options){
             if(this.el.style.hasOwnProperty(prop)){
@@ -114,6 +134,7 @@ class Dom {
         }
         return this;
     }
+
 }
 
 function $ (selector) {

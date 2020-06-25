@@ -1,8 +1,11 @@
 import ExcelComponent from "@core/ExcelComponent";
+import {toolbarInitialState} from '@/components/toolbar/toolbarInitialState.js';
 import {createTable} from "./table_tml";
 import TableSelection from './TableSelection.js';
 import $ from '@core/Dom.js';
+import parse from '@core/parse.js';
 import {resize, isCell, matrix, nextSelector} from "./actions.js"
+import * as actions from '@/redux/actions.js';
 
 export default class Table extends ExcelComponent {
 
@@ -16,10 +19,16 @@ export default class Table extends ExcelComponent {
         });
     }
 
+    resizeTable(e){
+        resize(e.target).then(
+            data => this.$dispatch( actions.tableResize(data) )
+        );
+    }
+
     onMousedown(e){
 
         if(e.target.dataset.resize){
-            resize(e.target);
+            this.resizeTable(e);
         }
         else if(isCell(e.target)){
 
@@ -33,7 +42,7 @@ export default class Table extends ExcelComponent {
             }
             else
             {
-                this.selection.select(target);
+                this.selectCell(target);
             }
         }
     }
@@ -52,7 +61,15 @@ export default class Table extends ExcelComponent {
     }
 
     onInput(e){
-        this.$emit('table:input', $(e.target));
+        this.updateTextInStore( $(e.target).text())
+    }
+
+    updateTextInStore (text) {
+
+        this.$dispatch(actions.changeText({
+            id: this.selection.current.id(),
+            text
+        }));
     }
 
     prepare(){
@@ -66,22 +83,37 @@ export default class Table extends ExcelComponent {
         this.selectCell(cell);
 
         this.$on('formula:input', (value) => {
-            this.selection.current.text(value)
+            this.selection.current
+                .attr('data-value', value)
+                .text(parse(value));
+
+            this.updateTextInStore(value);
         });
 
         this.$on('formula:focus', ()=>{
             this.selection.current.focus();
         })
 
+        this.$on('toolbar:applyStyle', (style) => {
+
+            this.selection.applyStyle(style);
+            this.$dispatch(actions.applyStyle({
+                value:style,
+                ids:this.selection.selectedIds
+            }));
+        });
     }
 
     selectCell(cell){
         this.selection.select(cell);
         this.$emit('table:select', cell);
+        let styles = cell.getStyles(Object.keys(toolbarInitialState));
+        this.$dispatch(actions.changeCurrentStyles(styles))
+
     }
 
     toHTML(){
-        return createTable();
+        return createTable(15,this.store.getState());
     }
 }
 

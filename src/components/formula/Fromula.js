@@ -9,6 +9,7 @@ export default class Formula extends ExcelComponent {
         super(root, {
             name: 'Formula',
             listeners: ['input','keydown'],
+            subscribe: ['currentText'],
             ...options,
         });
     }
@@ -25,15 +26,18 @@ export default class Formula extends ExcelComponent {
         }
     }
 
+    storeChange({currentText}){
+        this.$formula.text(currentText);
+    }
+
     init(){
         super.init();
-        const input = this.root.child('[data-type="input"]');
+        this.$formula = this.root.child('[data-type="input"]');
         this.$on('table:select', (cell) => {
-            input.text(cell.text())
-        })
-        this.$on('table:input', (cell) => {
-            input.text(cell.text())
-        })
+
+            this.$formula.text(cell.data.value)
+        });
+
     }
 
     toHTML(){
