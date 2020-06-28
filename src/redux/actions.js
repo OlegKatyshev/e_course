@@ -1,4 +1,4 @@
-import {TABLE_RESIZE, CHANGE_TEXT, CURRENT_STYLE, APPLY_STYLE, CHANGE_TITLE} from './types.js';
+import {TABLE_RESIZE, CHANGE_TEXT, CURRENT_STYLE, APPLY_STYLE, CHANGE_TITLE, UPDATE_DATE} from './types.js';
 
 export function tableResize(data) {
     return {
@@ -33,5 +33,10 @@ export function changeTitle(title) {
     return {
         type: CHANGE_TITLE,
         title
+    }
+}
+export function updateDate() {
+    return {
+        type:UPDATE_DATE
     }
 }

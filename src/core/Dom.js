@@ -26,7 +26,7 @@ class Dom {
     }
 
     clear(){
-        this.html();
+        this.el.innerHTML = '';
         return this;
     }
 
@@ -134,7 +134,6 @@ class Dom {
         }
         return this;
     }
-
 }
 
 function $ (selector) {

@@ -9,6 +9,11 @@ const defState = {
     currentText: '',
     title:'New Table',
     currentStyles: toolbarInitialState,
+    dateOpen: new Date().toJSON()
 }
 
-export const initialState = storage('excel-state') ? storage('excel-state') : defState;
+//export const initialState = storage('excel-state') ? storage('excel-state') : defState;
+
+export function initialState(name) {
+    return (storage(name)) ? storage(name) : defState;
+}
